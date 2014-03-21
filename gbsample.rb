@@ -1,6 +1,56 @@
 require 'sinatra'
+require "sinatra/config_file"
+require 'greenbutton'
+
+config_file 'config.yml'
 
 get '/greenbutton/:source' do
-  gb = [ params[:source], 3, 5, 12, 4, 3, 13, 7 ]
-  "This is the hash #{gb}"
+  # @url = params[:source]
+  @url = "https://services.greenbuttondata.org/DataCustodian/espi/1_1/resource/Batch/RetailCustomer/1/UsagePoint"
+  @collected_data = get_green_button_data_from(@url)
+  erb :greenbutton
+end
+
+
+
+def get_green_button_data_from(url)
+  # gb = GreenButton.load_xml_from_file('fixtures/sample_data.xml')
+  gb = GreenButton.load_xml_from_web(url)
+  puts "successfully loaded the file"
+  response = get_array_of_monthly_values(gb)
+  response
+end
+
+def get_array_of_monthly_values(gb)
+  interval_blocks = gb.usage_points.first.meter_readings.first.interval_blocks
+  interval_length = gb.usage_points.first.meter_readings.first.reading_type.interval_length
+  start_time = Time.new(2013,1,1,0,0,0)
+  end_time   = Time.new(2013,6,31,23,59,59)
+
+  timecursor = start_time
+  month = 1
+  month_total = 0
+  results = {}
+
+  while timecursor < end_time
+    current_month = timecursor.month
+    if current_month != month
+      results[month] = month_total
+      month = current_month
+      month_total = 0
+      puts "finished parsing a month"
+    end
+
+    interval_blocks.each do |block|
+      if timecursor >= block.start_time && timecursor < block.end_time
+        reading = block.reading_at_time(timecursor)
+        month_total += reading.value
+        break
+      end
+    end
+
+    timecursor += interval_length
+  end
+
+  results
 end
