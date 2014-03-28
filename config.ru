@@ -1,2 +1,2 @@
-require 'gbsample'
+require './gbsample'
 run Sinatra::Application
