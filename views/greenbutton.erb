@@ -38,7 +38,7 @@ $(function () {
                 }]
             },
             tooltip: {
-                valueSuffix: '°C'
+                valueSuffix: 'kWh'
             },
             legend: {
                 layout: 'vertical',
@@ -47,7 +47,7 @@ $(function () {
                 borderWidth: 0
             },
             series: [{
-                name: "John's House",
+                name: "Sample House",
                 data: <%= @collected_data.values %>
             }]
         });

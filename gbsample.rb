@@ -4,7 +4,7 @@ require 'greenbutton'
 
 config_file 'config.yml'
 
-get '/greenbutton/:source' do
+get '/greenbutton' do
   # @url = params[:source]
   @url = "https://services.greenbuttondata.org/DataCustodian/espi/1_1/resource/Batch/RetailCustomer/1/UsagePoint"
   @collected_data = get_green_button_data_from(@url)
@@ -24,8 +24,8 @@ end
 def get_array_of_monthly_values(gb)
   interval_blocks = gb.usage_points.first.meter_readings.first.interval_blocks
   interval_length = gb.usage_points.first.meter_readings.first.reading_type.interval_length
-  start_time = Time.new(2013,1,1,0,0,0)
-  end_time   = Time.new(2013,6,31,23,59,59)
+  start_time = Time.new(2012,1,1,0,0,0)
+  end_time   = Time.new(2014,6,31,23,59,59)
 
   timecursor = start_time
   month = 1
