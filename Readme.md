@@ -12,4 +12,8 @@ To run locally, clone the repository, `cd` into the repo, and run `$ bundle inst
 
 The action happens in `gbsample.rb`.
 
+## In Production ##
+
+The app, such as it is, is deployed on Heroku. You can test it by visiting http://gbsample.herokuapp.com/greenbutton.
+
 This software is Open Source. See license.txt for more details.

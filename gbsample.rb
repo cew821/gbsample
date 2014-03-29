@@ -24,8 +24,8 @@ end
 def get_array_of_monthly_values(gb)
   interval_blocks = gb.usage_points.first.meter_readings.first.interval_blocks
   interval_length = gb.usage_points.first.meter_readings.first.reading_type.interval_length
-  start_time = Time.new(2012,1,1,0,0,0)
-  end_time   = Time.new(2014,6,31,23,59,59)
+  start_time = Time.new(2013,1,1,0,0,0)
+  end_time   = Time.new(2014,1,31,23,59,59)
 
   timecursor = start_time
   month = 1
@@ -35,10 +35,10 @@ def get_array_of_monthly_values(gb)
   while timecursor < end_time
     current_month = timecursor.month
     if current_month != month
+      puts "finished parsing month #{month.to_s}. The total was #{month_total.to_s}"
       results[month] = month_total
       month = current_month
       month_total = 0
-      puts "finished parsing a month"
     end
 
     interval_blocks.each do |block|
